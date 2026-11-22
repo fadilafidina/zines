@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>dila's zine shelf</title>
   <meta name="description" content="A little shelf of mini zines by Fadila, plus the other things she makes.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <link rel="preload" href="fonts/gaegu-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="icon" href="../favicon.ico" sizes="any">
   <link rel="icon" type="image/png" href="../favicon.png">
   <link rel="apple-touch-icon" href="../apple-touch-icon.png">
@@ -15,30 +13,42 @@
 </head>
 <body>
 
-<main class="room">
-  <header class="head">
-    <h1>dila's zine shelf</h1>
-    <p>Mini zines folded from one sheet of paper. Pick one up to read it.</p>
-  </header>
+<!-- wobble filters that make every drawing look hand-inked -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <filter id="wob" x="-10%" y="-10%" width="120%" height="120%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="3"/>
+    <feDisplacementMap in="SourceGraphic" scale="3.4" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <filter id="wob2" x="-10%" y="-10%" width="120%" height="120%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="11"/>
+    <feDisplacementMap in="SourceGraphic" scale="4" xChannelSelector="G" yChannelSelector="R"/>
+  </filter>
+</svg>
 
+<header class="top">
+  <a class="title" href="./">dila's zine shelf</a>
+  <a class="mascot" href="../" aria-label="Back to fadila.exe" id="mascot"></a>
+  <div class="top-right">
+    <div class="clock" id="clock" aria-label="Sydney time"></div>
+    <button class="sound" id="soundBtn" aria-pressed="true">sound on ♪</button>
+  </div>
+</header>
+
+<main class="room" id="room">
+  <p class="sub">₍ᐢ. .ᐢ₎ tiny zines folded from one sheet of paper ♡ pick one up!</p>
   <section class="shelves" id="shelves" aria-label="Shelf"></section>
-
-  <footer class="foot"><a href="../">← back to fadila.exe</a></footer>
+  <footer class="foot"><a href="../">← back to fadila.exe</a> <span aria-hidden="true">(˶ᵔ ᵕ ᵔ˶)</span></footer>
 </main>
 
 <!-- zine viewer -->
 <div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-labelledby="viewerTitle" hidden>
-  <div class="viewer-head">
-    <div>
-      <h2 id="viewerTitle"></h2>
-      <p id="viewerMeta"></p>
-    </div>
-    <button class="txt-btn" id="viewerClose">close ✕</button>
+  <p class="viewer-title"><span id="viewerTitle"></span> <span class="viewer-meta" id="viewerMeta"></span></p>
+  <div class="stage" id="stage" tabindex="0" aria-label="Zine pages. Scroll or use the arrow keys to unfold.">
+    <div class="strip" id="strip"></div>
   </div>
-  <div class="accordion" id="accordion" tabindex="0" aria-label="Zine pages, scroll sideways"></div>
-  <p class="viewer-foot"><span class="hint-d">scroll to turn the pages →</span><span class="hint-m">swipe to turn the pages →</span></p>
+  <p class="viewer-hint" id="viewerHint">scroll to unfold ✧</p>
+  <button class="back" id="viewerClose">back to shelf</button>
 </div>
-
 
 <script src="zines.js"></script>
 </body>

@@ -9,86 +9,91 @@ const ZINES = {
   'nagano':         { title: 'november in nagano', meta: '2025' },
 };
 
-/* Flat illustrations: [width in px, viewBox height, svg body] */
+/* Drawings: [width, height, shapes]. Each is drawn twice: a colour layer and a
+   wobbly ink outline on top, slightly out of register, like a marker doodle.
+   class="hl" = no outline, class="ink" = solid ink. */
 const ART = {
   plant: [84, 110, `
-    <path d="M42 68C30 42 10 40 6 24c18-2 34 12 36 44Z" fill="#7f9f7a"/>
-    <path d="M42 68c4-30 20-46 38-48-2 20-20 34-38 48Z" fill="#9bb59a"/>
-    <path d="M42 68c-4-26-2-50 4-64 10 20 6 44-4 64Z" fill="#6f8f6c"/>
-    <path d="M42 68C26 60 14 64 4 54c14-8 30-2 38 14Z" fill="#9bb59a"/>
-    <path d="M42 68c14-10 28-8 40-18-14-8-30 0-40 18Z" fill="#7f9f7a"/>
-    <path d="M20 68h44l-6 40H26Z" fill="#d58a6a"/>
-    <rect x="16" y="64" width="52" height="10" rx="2" fill="#c97a5a"/>`],
+    <path d="M42 68C30 42 10 40 6 24c18-2 34 12 36 44Z" fill="#8fb08a"/>
+    <path d="M42 68c4-30 20-46 38-48-2 20-20 34-38 48Z" fill="#a9c6a3"/>
+    <path d="M42 68c-4-26-2-50 4-64 10 20 6 44-4 64Z" fill="#7da078"/>
+    <path d="M42 68C26 60 14 64 4 54c14-8 30-2 38 14Z" fill="#a9c6a3"/>
+    <path d="M42 68c14-10 28-8 40-18-14-8-30 0-40 18Z" fill="#8fb08a"/>
+    <path d="M20 68h44l-6 40H26Z" fill="#e39a7b"/>
+    <rect x="16" y="64" width="52" height="10" rx="2" fill="#d98a6a"/>`],
   snake: [60, 130, `
-    <path d="M30 94c-6-32-8-62-2-88 8 26 8 56 6 88Z" fill="#5f7f5c"/>
-    <path d="M26 94C14 72 8 48 10 24c10 22 16 44 20 70Z" fill="#7f9f7a"/>
-    <path d="M34 94c8-22 14-42 14-62-10 20-16 40-18 62Z" fill="#6f8f6c"/>
-    <rect x="12" y="90" width="36" height="40" rx="4" fill="#efe6d8"/>
-    <rect x="12" y="90" width="36" height="6" fill="#e2d6c3"/>`],
+    <path d="M30 94c-6-32-8-62-2-88 8 26 8 56 6 88Z" fill="#6f9468"/>
+    <path d="M26 94C14 72 8 48 10 24c10 22 16 44 20 70Z" fill="#94b88c"/>
+    <path d="M34 94c8-22 14-42 14-62-10 20-16 40-18 62Z" fill="#7fa577"/>
+    <rect x="12" y="90" width="36" height="40" rx="4" fill="#f4ece0"/>`],
   lamp: [74, 128, `
-    <path d="M18 8h38l14 42H4Z" fill="#f1d38a"/>
-    <rect x="4" y="48" width="66" height="4" fill="#e6c26f"/>
-    <rect x="35" y="52" width="4" height="66" fill="#3b3a36"/>
-    <ellipse cx="37" cy="121" rx="20" ry="6" fill="#3b3a36"/>`],
+    <path d="M18 8h38l14 42H4Z" fill="#f6d77c"/>
+    <rect x="35" y="50" width="4" height="66" fill="#f4ece0"/>
+    <ellipse cx="37" cy="120" rx="20" ry="6" fill="#f4ece0"/>
+    <path class="hl" d="M14 34l-6 14M20 36l-3 10" fill="none" stroke="#fff" stroke-width="3" opacity=".7"/>`],
   books: [96, 72, `
-    <rect x="6" y="54" width="84" height="18" rx="2" fill="#8fb3cc"/>
-    <rect x="6" y="54" width="6" height="18" fill="#7aa0bb"/>
-    <rect x="12" y="38" width="72" height="16" rx="2" fill="#e8b4b8"/>
-    <rect x="78" y="38" width="6" height="16" fill="#d99ca1"/>
-    <rect x="18" y="24" width="62" height="14" rx="2" fill="#efe6d8"/>
-    <rect x="18" y="29" width="62" height="2" fill="#d9b896"/>`],
-  mug: [64, 70, `
-    <path d="M22 4c-6 6 6 10 0 16M34 4c-6 6 6 10 0 16" fill="none" stroke="#d6cec2" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M48 36h4a8 8 0 0 1 0 16h-4" fill="none" stroke="#d58a6a" stroke-width="6"/>
-    <rect x="8" y="28" width="40" height="42" rx="6" fill="#d58a6a"/>
-    <rect x="8" y="40" width="40" height="5" fill="#e8b4b8"/>`],
+    <rect x="6" y="54" width="84" height="18" rx="2" fill="#9cc0dc"/>
+    <rect x="12" y="38" width="72" height="16" rx="2" fill="#f2b8c2"/>
+    <rect x="18" y="24" width="62" height="14" rx="2" fill="#f4ece0"/>
+    <path d="M12 54v18M78 38v16" fill="none"/>`],
+  mug: [66, 72, `
+    <path d="M22 4c-6 6 6 10 0 16M34 4c-6 6 6 10 0 16" fill="none"/>
+    <path d="M46 34h6a10 10 0 0 1 0 20h-6v-6h6a4 4 0 0 0 0-8h-6Z" fill="#e39a7b"/>
+    <rect x="8" y="28" width="40" height="42" rx="6" fill="#e39a7b"/>
+    <circle class="ink" cx="21" cy="46" r="2"/><circle class="ink" cx="35" cy="46" r="2"/>
+    <path d="M25 52q3 3 6 0" fill="none"/>
+    <ellipse class="hl" cx="16" cy="52" rx="3.5" ry="2" fill="#f6b3c0"/><ellipse class="hl" cx="40" cy="52" rx="3.5" ry="2" fill="#f6b3c0"/>`],
   camera: [98, 70, `
-    <rect x="14" y="6" width="22" height="12" rx="2" fill="#3b3a36"/>
-    <rect x="72" y="8" width="12" height="8" rx="2" fill="#bdb6aa"/>
-    <rect x="4" y="14" width="90" height="56" rx="8" fill="#3b3a36"/>
-    <rect x="4" y="32" width="90" height="26" fill="#55524c"/>
-    <rect x="70" y="20" width="16" height="8" rx="1" fill="#8fb3cc"/>
-    <circle cx="48" cy="44" r="21" fill="#efe6d8"/>
-    <circle cx="48" cy="44" r="16" fill="#3b3a36"/>
-    <circle cx="48" cy="44" r="10" fill="#5f86a3"/>
-    <circle cx="44" cy="40" r="3" fill="#fff" opacity=".7"/>`],
-  matcha: [90, 76, `
-    <path d="M2 42a28 28 0 0 0 56 0Z" fill="#efe6d8"/>
-    <rect x="20" y="66" width="20" height="8" rx="2" fill="#e2d6c3"/>
-    <ellipse cx="30" cy="42" rx="28" ry="5" fill="#9bbf6a"/>
-    <path d="M65 40 63 74h22l-2-34Z" fill="#e8d4b0"/>
-    <path d="M68 44l-1 28M74 44v28M80 44l1 28" stroke="#d6bf96" stroke-width="1.5"/>
-    <rect x="68" y="10" width="12" height="34" rx="4" fill="#d9b896"/>`],
+    <rect x="14" y="6" width="22" height="12" rx="2" fill="#6d6a66"/>
+    <rect x="72" y="8" width="12" height="8" rx="2" fill="#d8d2c8"/>
+    <rect x="4" y="14" width="90" height="56" rx="8" fill="#6d6a66"/>
+    <rect x="4" y="32" width="90" height="26" fill="#57544f"/>
+    <rect x="70" y="20" width="16" height="8" rx="1" fill="#9cc0dc"/>
+    <circle cx="48" cy="44" r="21" fill="#f4ece0"/>
+    <circle cx="48" cy="44" r="14" fill="#7ea6c6"/>
+    <circle class="hl" cx="43" cy="39" r="4" fill="#fff" opacity=".8"/>`],
+  matcha: [92, 78, `
+    <path d="M2 42a28 28 0 0 0 56 0Z" fill="#f4ece0"/>
+    <rect x="20" y="68" width="20" height="8" rx="2" fill="#f4ece0"/>
+    <ellipse cx="30" cy="42" rx="28" ry="5" fill="#a5c773"/>
+    <path d="M65 40 63 74h22l-2-34Z" fill="#ecd9b3"/>
+    <path d="M69 46l-1 26M74 46v26M79 46l1 26" fill="none"/>
+    <rect x="68" y="10" width="12" height="32" rx="4" fill="#dcbc93"/>`],
   paint: [70, 110, `
-    <g transform="rotate(-12 22 70)"><rect x="19" y="14" width="6" height="60" rx="3" fill="#d58a6a"/><rect x="19" y="10" width="6" height="8" fill="#bdb6aa"/><path d="M19 10c0-6 3-9 3-9s3 3 3 9Z" fill="#3b3a36"/></g>
-    <g><rect x="33" y="6" width="6" height="66" rx="3" fill="#8fb3cc"/><rect x="33" y="2" width="6" height="8" fill="#bdb6aa"/></g>
-    <g transform="rotate(10 50 70)"><rect x="46" y="16" width="6" height="58" rx="3" fill="#f1d38a"/><rect x="46" y="12" width="6" height="8" fill="#bdb6aa"/><path d="M46 12c0-6 3-9 3-9s3 3 3 9Z" fill="#e8b4b8"/></g>
-    <rect x="8" y="50" width="54" height="58" rx="8" fill="#dbe8ef" opacity=".92"/>
-    <rect x="8" y="72" width="54" height="36" rx="8" fill="#b4cfdd"/>
-    <rect x="6" y="46" width="58" height="8" rx="3" fill="#c3d7e2"/>`],
+    <g transform="rotate(-12 22 70)"><rect x="19" y="14" width="6" height="60" rx="3" fill="#e39a7b"/><path d="M19 14c0-7 3-11 3-11s3 4 3 11Z" fill="#57544f"/></g>
+    <g><rect x="33" y="8" width="6" height="64" rx="3" fill="#9cc0dc"/><path d="M33 8c0-6 3-9 3-9s3 3 3 9Z" fill="#f2b8c2"/></g>
+    <g transform="rotate(10 50 70)"><rect x="46" y="16" width="6" height="58" rx="3" fill="#f6d77c"/><path d="M46 16c0-7 3-10 3-10s3 3 3 10Z" fill="#a5c773"/></g>
+    <rect x="8" y="48" width="54" height="60" rx="8" fill="#dbe9f1"/>
+    <path class="noline" d="M8 74h54v26a8 8 0 0 1-8 8H16a8 8 0 0 1-8-8Z" fill="#b8d3e2"/>`],
   frame: [80, 100, `
-    <rect x="4" y="4" width="72" height="92" rx="2" fill="#bf9670"/>
-    <rect x="12" y="12" width="56" height="76" fill="#faf7f2"/>
-    <rect x="18" y="18" width="44" height="64" fill="#8fb3cc"/>
-    <circle cx="50" cy="32" r="6" fill="#f1d38a"/>
-    <path d="M18 66q14-14 26-4t18-4v24H18Z" fill="#7f9f7a"/>`],
-  strip: [34, 110, `
-    <rect x="0" y="0" width="34" height="110" rx="1" fill="#fff"/>
-    <rect x="5" y="5" width="24" height="22" fill="#e8b4b8"/>
-    <rect x="5" y="31" width="24" height="22" fill="#8fb3cc"/>
-    <rect x="5" y="57" width="24" height="22" fill="#f1d38a"/>
-    <rect x="5" y="83" width="24" height="22" fill="#9bb59a"/>`],
+    <rect x="4" y="4" width="72" height="92" rx="2" fill="#d4a97f"/>
+    <rect x="13" y="13" width="54" height="74" fill="#9cc0dc"/>
+    <circle cx="50" cy="32" r="6" fill="#f6d77c"/>
+    <path d="M13 70q14-14 26-4t28-6v27H13Z" fill="#8fb08a"/>`],
+  strip: [36, 112, `
+    <rect x="1" y="1" width="34" height="110" rx="1" fill="#fff"/>
+    <rect x="6" y="6" width="24" height="22" fill="#f2b8c2"/>
+    <rect x="6" y="32" width="24" height="22" fill="#9cc0dc"/>
+    <rect x="6" y="58" width="24" height="22" fill="#f6d77c"/>
+    <rect x="6" y="84" width="24" height="22" fill="#a9c6a3"/>`],
   bottle: [50, 110, `
-    <rect x="19" y="2" width="12" height="12" rx="2" fill="#bf9670"/>
-    <rect x="18" y="12" width="14" height="22" fill="#cfe0ea"/>
-    <path d="M18 32C6 40 4 50 4 60v40a8 8 0 0 0 8 8h26a8 8 0 0 0 8-8V60c0-10-2-20-14-28Z" fill="#cfe0ea"/>
-    <rect x="16" y="56" width="18" height="36" rx="3" fill="#f3e7c9"/>
-    <rect x="16" y="70" width="18" height="4" fill="#d58a6a"/>
-    <rect x="9" y="58" width="4" height="34" rx="2" fill="#fff" opacity=".6"/>`],
+    <rect x="19" y="2" width="12" height="12" rx="2" fill="#d4a97f"/>
+    <path d="M18 14h14v18c12 8 14 18 14 28v40a8 8 0 0 1-8 8H12a8 8 0 0 1-8-8V60c0-10 2-20 14-28Z" fill="#dbe9f1"/>
+    <rect x="16" y="56" width="18" height="36" rx="3" fill="#f8edd2"/>
+    <path d="M16 72h18" fill="none"/>
+    <rect class="hl" x="9" y="58" width="4" height="30" rx="2" fill="#fff"/>`],
+  /* little matcha mascot for the header */
+  mascot: [72, 72, `
+    <path d="M44 4c-5 5 5 8 0 13M54 6c-5 5 5 8 0 13" fill="none"/>
+    <path d="M6 24h60l-6 36a9 9 0 0 1-9 8H21a9 9 0 0 1-9-8Z" fill="#f4ece0"/>
+    <ellipse cx="36" cy="24" rx="30" ry="7" fill="#a5c773"/>
+    <circle class="ink" cx="26" cy="42" r="2.6"/><circle class="ink" cx="46" cy="42" r="2.6"/>
+    <path d="M31 47q2.5 3 5 0q2.5 3 5 0" fill="none"/>
+    <ellipse class="hl" cx="19" cy="49" rx="4.5" ry="2.6" fill="#f6b3c0"/><ellipse class="hl" cx="53" cy="49" rx="4.5" ry="2.6" fill="#f6b3c0"/>`],
 };
 
 /* What sits on each shelf, left to right.
-   { zine: id, lean } | { art, label?, href?, hideSm? } — no href means decoration */
+   { zine: id, lean } | { art, label?, href?, hideSm? } (no href = decoration) */
 const SHELVES = [
   [
     { art: 'plant' },
@@ -117,12 +122,93 @@ const $ = (s, el = document) => el.querySelector(s);
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const page = (id, n) => `pages/${id}/${n}.jpg`;
 const pageName = (n) => (n === 1 ? 'front cover' : n === 8 ? 'back cover' : `page ${n - 1}`);
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 
-function svg(name) {
+function doodle(name) {
   const [w, h, body] = ART[name];
-  // viewBox widths match the px widths, so width = w keeps them at a natural size
-  return `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" style="--w:${w}" aria-hidden="true">${body}</svg>`;
+  return `<svg class="doodle" viewBox="-4 -4 ${w + 8} ${h + 8}" width="${w + 8}" height="${h + 8}" style="--w:${w + 8}" aria-hidden="true">
+    <g class="fill" filter="url(#wob2)" transform="translate(1.8 1.6)">${body}</g>
+    <g class="line" filter="url(#wob)">${body}</g></svg>`;
 }
+
+function plank() {
+  return `<svg class="plank doodle" viewBox="0 0 800 18" preserveAspectRatio="none" aria-hidden="true">
+    <g class="fill" filter="url(#wob2)" transform="translate(1.5 1.5)"><rect x="2" y="3" width="796" height="11" fill="#dcbc93"/></g>
+    <g class="line" filter="url(#wob)"><path d="M2 3h796v11H2Z" vector-effect="non-scaling-stroke"/><path d="M40 8.5h120M420 9h90M640 8h60" vector-effect="non-scaling-stroke" style="stroke-width:1.2"/></g></svg>`;
+}
+
+$('#mascot').innerHTML = doodle('mascot');
+
+/* ---------- clock (Sydney time) ---------- */
+const clockEl = $('#clock');
+function tick() {
+  const now = new Date();
+  const d = new Intl.DateTimeFormat('en-AU', { timeZone: 'Australia/Sydney', day: 'numeric', month: 'short' }).format(now).toLowerCase();
+  const t = new Intl.DateTimeFormat('en-GB', { timeZone: 'Australia/Sydney', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).format(now);
+  clockEl.textContent = `${d}\n${t}`;
+}
+tick(); setInterval(tick, 1000);
+
+/* ---------- paper sounds (made with Web Audio, no files) ---------- */
+const sfx = (() => {
+  let ctx = null, noise = null;
+  let on = true;
+  try { on = localStorage.getItem('zine-sound') !== 'off'; } catch (e) {}
+  function ac() {
+    if (!ctx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      ctx = new AC();
+      noise = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
+      const d = noise.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    }
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+  function burst({ at = 0, dur = .2, f = 2000, to, q = 1, gain = .2, type = 'bandpass' }) {
+    const c = ac(); if (!c) return;
+    const t0 = c.currentTime + at;
+    const src = c.createBufferSource(); src.buffer = noise;
+    const fl = c.createBiquadFilter(); fl.type = type; fl.Q.value = q;
+    fl.frequency.setValueAtTime(f, t0);
+    if (to) fl.frequency.exponentialRampToValueAtTime(to, t0 + dur);
+    const g = c.createGain();
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(gain, t0 + .015);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    src.connect(fl).connect(g).connect(c.destination);
+    src.start(t0, Math.random() * .5); src.stop(t0 + dur + .02);
+  }
+  function thump(gain = .25) {
+    const c = ac(); if (!c) return;
+    const t0 = c.currentTime;
+    const o = c.createOscillator(); o.type = 'sine';
+    o.frequency.setValueAtTime(150, t0); o.frequency.exponentialRampToValueAtTime(55, t0 + .14);
+    const g = c.createGain();
+    g.gain.setValueAtTime(gain, t0); g.gain.exponentialRampToValueAtTime(0.0001, t0 + .16);
+    o.connect(g).connect(c.destination); o.start(t0); o.stop(t0 + .18);
+  }
+  let last = 0;
+  return {
+    get on() { return on; },
+    toggle() { on = !on; try { localStorage.setItem('zine-sound', on ? 'on' : 'off'); } catch (e) {} if (on) ac(); return on; },
+    pickUp() { if (!on) return; burst({ dur: .3, f: 900, to: 3800, q: .7, gain: .32 }); burst({ at: .07, dur: .14, f: 4200, q: 1.4, gain: .12 }); },
+    putDown() { if (!on) return; burst({ dur: .22, f: 3200, to: 700, q: .8, gain: .26 }); thump(.22); },
+    rustle(speed) {
+      if (!on) return;
+      const now = performance.now();
+      if (now - last < 65) return;
+      last = now;
+      burst({ dur: .04 + Math.random() * .06, f: 1800 + Math.random() * 3200, q: 1.8, gain: clamp(speed / 700, .025, .11) });
+    },
+  };
+})();
+
+const soundBtn = $('#soundBtn');
+const paintSound = () => { soundBtn.textContent = sfx.on ? 'sound on ♪' : 'sound off'; soundBtn.setAttribute('aria-pressed', sfx.on); };
+paintSound();
+soundBtn.addEventListener('click', () => { sfx.toggle(); paintSound(); });
 
 /* ---------- build the shelves ---------- */
 const shelvesEl = $('#shelves');
@@ -148,78 +234,160 @@ SHELVES.forEach((row) => {
       el.href = it.href;
       if (/^https?:/.test(it.href)) { el.target = '_blank'; el.rel = 'noopener'; }
       el.setAttribute('aria-label', it.label.replace(/[↗→]/g, '').trim());
-      el.innerHTML = svg(it.art) + `<span class="label">${esc(it.label)}</span>`;
+      el.innerHTML = doodle(it.art) + `<span class="label">${esc(it.label)}</span>`;
     } else {
       el = document.createElement('div');
       el.className = 'item';
       el.setAttribute('aria-hidden', 'true');
-      el.innerHTML = svg(it.art);
+      el.innerHTML = doodle(it.art);
     }
+    el.style.setProperty('--wig', (Math.random() < .5 ? -2.5 : 2.5) + 'deg');
     if (it.hideSm) el.classList.add('hide-sm');
     if (it.lean && !it.zine) el.style.transform = `rotate(${it.lean}deg)`;
     items.append(el);
   });
 
-  const plank = document.createElement('div');
-  plank.className = 'plank';
-  shelf.append(items, plank);
+  shelf.append(items);
+  shelf.insertAdjacentHTML('beforeend', plank());
   shelvesEl.append(shelf);
 });
 
-/* ---------- viewer: big pages, scroll sideways ---------- */
+/* ============ viewer: scrunched → unfolds → slides ============ */
 const viewer = $('#viewer');
-const acc = $('#accordion');
-let opener = null;
+const stage = $('#stage');
+const strip = $('#strip');
+const hint = $('#viewerHint');
+const N = 8;
+const D = Math.PI / 180;
+let panels = [], opener = null;
+let PW = 0, PH = 0, FOLD = 0, UNFOLD = 0, PAN = 0, MARGIN = 0, VW = 0;
+let target = 0, pos = 0, base = 0, baseTarget = 0, raf = 0;
+
+function measure() {
+  VW = stage.clientWidth;
+  const small = VW < 700;
+  PH = small ? Math.min(stage.clientHeight * .62, VW * .58 * 148.5 / 105) : Math.min(innerHeight * .4, 430);
+  PW = PH * 105 / 148.5;
+  // fold angle so the scrunched zine takes up roughly the middle of the screen
+  FOLD = clamp(Math.acos(clamp((small ? .9 : .62) * VW / (N * PW), 0, 1)), 35 * D, 74 * D);
+  UNFOLD = small ? 420 : 650;              // scroll distance spent unfolding
+  MARGIN = small ? VW * .08 : VW * .07;
+  PAN = Math.max(0, N * PW - (VW - 2 * MARGIN)); // scroll distance spent sliding
+  strip.style.height = PH + 'px';
+  panels.forEach((p) => { p.style.width = PW + 'px'; p.style.height = PH + 'px'; });
+}
+
+function render() {
+  const u = clamp(pos / UNFOLD, 0, 1);        // 0 = scrunched, 1 = flat
+  const a = base * (1 - u);
+  const c = Math.cos(a), s = Math.sin(a);
+  const total = N * PW * c;
+  const centred = (VW - total) / 2;
+  const x0 = Math.max(centred, MARGIN) - Math.max(0, pos - UNFOLD); // cover stays on screen
+  const zOff = PW * s / 2;
+  panels.forEach((p, i) => {
+    const odd = i % 2 === 1;
+    const x = x0 + i * PW * c;
+    const z = (odd ? -PW * s : 0) + zOff;
+    p.style.transform = `translate3d(${x}px,0,${z}px) rotateY(${odd ? -a : a}rad)`;
+    p.style.setProperty('--s', ((odd ? .2 : .05) * s).toFixed(3));
+  });
+  hint.textContent = u < .98 ? 'scroll to unfold ✧' : pos >= UNFOLD + PAN - 2 ? 'the end ♡ scroll back to fold' : 'keep scrolling →';
+}
+
+function loop() {
+  base += (baseTarget - base) * .085;
+  const prev = pos;
+  pos += (target - pos) * .11;
+  render();
+  if (Math.abs(target - pos) > .2 || Math.abs(baseTarget - base) > .0003) raf = requestAnimationFrame(loop);
+  else { pos = target; base = baseTarget; render(); raf = 0; }
+  return prev;
+}
+const kick = () => { if (!raf) raf = requestAnimationFrame(loop); };
+
+function move(delta) {
+  const before = target;
+  target = clamp(target + delta, 0, UNFOLD + PAN);
+  if (target !== before) sfx.rustle(Math.abs(delta));
+  kick();
+}
 
 function openZine(id, from) {
   opener = from;
   const z = ZINES[id];
   $('#viewerTitle').textContent = z.title;
-  $('#viewerMeta').textContent = z.meta || '';
-  acc.innerHTML = '';
-  for (let n = 1; n <= 8; n++) {
+  $('#viewerMeta').textContent = z.meta ? `· ${z.meta}` : '';
+  strip.innerHTML = '';
+  panels = [];
+  for (let n = 1; n <= N; n++) {
     const p = document.createElement('figure');
     p.className = 'panel';
-    p.style.setProperty('--i', n - 1);
     p.innerHTML = `<img src="${page(id, n)}" alt="${esc(z.title)}, ${pageName(n)}" draggable="false">`;
-    acc.append(p);
+    strip.append(p);
+    panels.push(p);
   }
-  acc.scrollLeft = 0;
-  acc.classList.add('folded');
+  scrollTo(0, 0);
   viewer.hidden = false;
   document.body.style.overflow = 'hidden';
-  requestAnimationFrame(() => requestAnimationFrame(() => acc.classList.remove('folded')));
-  acc.focus({ preventScroll: true });
+  strip.style.animation = 'none'; strip.offsetHeight; strip.style.animation = '';
+  measure();
+  target = pos = 0;
+  base = 88 * D; baseTarget = FOLD;   // starts nearly shut, settles into the scrunch
+  render(); kick();
+  sfx.pickUp();
+  stage.focus({ preventScroll: true });
 }
 
 function closeZine() {
-  viewer.hidden = true;
-  document.body.style.overflow = '';
-  opener?.focus();
+  if (viewer.hidden) return;
+  if (viewer.classList.contains('closing')) return;
+  sfx.putDown();
+  // fold it back up, then drop it
+  target = 0; baseTarget = 88 * D; kick();
+  viewer.classList.add('closing');
+  setTimeout(() => {
+    viewer.hidden = true;
+    viewer.classList.remove('closing');
+    document.body.style.overflow = '';
+    cancelAnimationFrame(raf); raf = 0;
+    opener?.focus();
+  }, 320);
 }
 $('#viewerClose').addEventListener('click', closeZine);
 
-/* the mouse wheel moves the pages sideways */
-acc.addEventListener('wheel', (e) => {
-  if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return; // trackpad sideways swipe: leave it
+/* wheel / trackpad */
+stage.addEventListener('wheel', (e) => {
   e.preventDefault();
-  acc.scrollLeft += e.deltaY;
+  const d = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+  move(d * (e.deltaMode === 1 ? 30 : 1));
 }, { passive: false });
 
-/* drag to scroll with the mouse */
+/* touch and mouse drag */
 let drag = null;
-acc.addEventListener('pointerdown', (e) => {
-  if (e.pointerType !== 'mouse') return;
-  drag = { x: e.clientX, left: acc.scrollLeft };
-  acc.classList.add('dragging');
+stage.addEventListener('pointerdown', (e) => {
+  drag = { x: e.clientX, y: e.clientY };
+  stage.setPointerCapture(e.pointerId);
+  stage.classList.add('dragging');
 });
-addEventListener('pointermove', (e) => { if (drag) acc.scrollLeft = drag.left - (e.clientX - drag.x); });
-addEventListener('pointerup', () => { drag = null; acc.classList.remove('dragging'); });
+stage.addEventListener('pointermove', (e) => {
+  if (!drag) return;
+  const dx = drag.x - e.clientX, dy = drag.y - e.clientY;
+  drag = { x: e.clientX, y: e.clientY };
+  move((Math.abs(dx) >= Math.abs(dy) ? dx : dy) * 1.6);
+});
+const endDrag = () => { drag = null; stage.classList.remove('dragging'); };
+stage.addEventListener('pointerup', endDrag);
+stage.addEventListener('pointercancel', endDrag);
 
 document.addEventListener('keydown', (e) => {
   if (viewer.hidden) return;
-  const step = acc.firstElementChild?.offsetWidth || 300;
   if (e.key === 'Escape') closeZine();
-  if (e.key === 'ArrowRight') { e.preventDefault(); acc.scrollBy({ left: step, behavior: 'smooth' }); }
-  if (e.key === 'ArrowLeft') { e.preventDefault(); acc.scrollBy({ left: -step, behavior: 'smooth' }); }
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); move(PW * .9); }
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); move(-PW * .9); }
+});
+
+addEventListener('resize', () => {
+  if (viewer.hidden) return;
+  measure(); baseTarget = base = FOLD; target = clamp(target, 0, UNFOLD + PAN); pos = target; render();
 });
