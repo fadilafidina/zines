@@ -91,7 +91,7 @@ a.item:hover, button.item:hover, a.item:focus-visible, button.item:focus-visible
 
 /* ---------- accordion: big pages in a gentle zigzag, scroll sideways ---------- */
 .accordion {
-  --ph: min(calc(100vh - 190px), 1000px);
+  --ph: min(42vh, 440px);
   --pw: calc(var(--ph) * 105 / 148.5);
   flex: 1; display: flex; align-items: center;
   overflow-x: auto; overflow-y: hidden;
@@ -131,8 +131,8 @@ a.item:hover, button.item:hover, a.item:focus-visible, button.item:focus-visible
   .viewer { padding: 22px 0 20px; }
   .viewer-head { padding: 0 20px; }
   .accordion {
-    --pw: 82vw; --ph: calc(var(--pw) * 148.5 / 105);
-    margin: 0; perspective: none; gap: 12px; padding: 0 9vw; scroll-snap-type: x mandatory; cursor: auto;
+    --pw: 60vw; --ph: calc(var(--pw) * 148.5 / 105);
+    margin: 0; perspective: none; gap: 12px; padding: 0 20vw; scroll-snap-type: x mandatory; cursor: auto;
   }
   .panel { --ang: 0deg !important; margin-left: 0 !important; scroll-snap-align: center; }
   .panel::after { display: none; }
