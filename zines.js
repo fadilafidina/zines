@@ -12,20 +12,49 @@ const ZINES = {
 /* Drawings: [width, height, shapes]. Each is drawn twice: a colour layer and a
    wobbly ink outline on top, slightly out of register, like a marker doodle.
    class="hl" = no outline, class="ink" = solid ink. */
+/* leaf helpers for the plants */
+const HEART = 'M0 0c-6-6-13-2-11 5 2 6 11 10 11 15 0-5 9-9 11-15 2-7-5-11-11-5Z';
+const PCOL = ['#8fb08a', '#a9c6a3', '#7da078'];
+const leaf = (x, y, r, i, s = 1) =>
+  `<g transform="translate(${x} ${y}) rotate(${r}) scale(${s})"><path class="lf" style="--d:${(i * 0.05).toFixed(2)}s" d="${HEART}" fill="${PCOL[i % 3]}"/></g>`;
+/* monstera leaf: oval with split edges, drawn pointing up from its stem tip */
+function mleaf(x, y, rot, i, col, L = 58, W = 52) {
+  const pt = (t) => [Math.sin(t) * W / 2, -L / 2 - Math.cos(t) * L / 2];  // t=0 top, t=PI base
+  let d = '';
+  for (let k = 0; k <= 36; k++) {
+    const t = (k / 36) * Math.PI * 2;
+    let [px, py] = pt(t);
+    if (Math.abs(t - Math.PI) < .35) py -= 5 * (1 - Math.abs(t - Math.PI) / .35); // notch at the stem
+    d += (k ? 'L' : 'M') + px.toFixed(1) + ' ' + py.toFixed(1);
+  }
+  let cuts = '';
+  [.75, 1.25, 1.75, 2.3].forEach((t) => [t, -t].forEach((tt) => {
+    const [a1, b1] = pt(tt - .09), [a2, b2] = pt(tt + .09), [ex, ey] = pt(tt);
+    const ix = ex * .4, iy = ey + (-L / 2 - ey) * .25;
+    cuts += `<path class="cut" d="M${a1.toFixed(1)} ${b1.toFixed(1)}L${ix.toFixed(1)} ${iy.toFixed(1)}L${a2.toFixed(1)} ${b2.toFixed(1)}Z" fill="#fbfaf6"/>`;
+  }));
+  return `<g transform="translate(${x} ${y}) rotate(${rot})"><g class="lf" style="--d:${(i * .08).toFixed(2)}s">` +
+    `<path d="${d}Z" fill="${col}"/><path d="M0 -2V${-L + 6}" fill="none"/>${cuts}</g></g>`;
+}
+
 const ART = {
-  plant: [84, 110, `
-    <path d="M42 68C30 42 10 40 6 24c18-2 34 12 36 44Z" fill="#8fb08a"/>
-    <path d="M42 68c4-30 20-46 38-48-2 20-20 34-38 48Z" fill="#a9c6a3"/>
-    <path d="M42 68c-4-26-2-50 4-64 10 20 6 44-4 64Z" fill="#7da078"/>
-    <path d="M42 68C26 60 14 64 4 54c14-8 30-2 38 14Z" fill="#a9c6a3"/>
-    <path d="M42 68c14-10 28-8 40-18-14-8-30 0-40 18Z" fill="#8fb08a"/>
-    <path d="M20 68h44l-6 40H26Z" fill="#e39a7b"/>
-    <rect x="16" y="64" width="52" height="10" rx="2" fill="#d98a6a"/>`],
-  snake: [60, 130, `
-    <path d="M30 94c-6-32-8-62-2-88 8 26 8 56 6 88Z" fill="#6f9468"/>
-    <path d="M26 94C14 72 8 48 10 24c10 22 16 44 20 70Z" fill="#94b88c"/>
-    <path d="M34 94c8-22 14-42 14-62-10 20-16 40-18 62Z" fill="#7fa577"/>
-    <rect x="12" y="90" width="36" height="40" rx="4" fill="#f4ece0"/>`],
+  pothos: [96, 80, `
+    ${leaf(30, 46, 155, 0, 1.25)}${leaf(46, 40, 180, 1, 1.4)}${leaf(62, 46, -155, 2, 1.25)}${leaf(38, 44, 205, 4, 1.05)}${leaf(55, 43, 165, 3, 1.05)}
+    <path d="M20 50h56l-6 30H26Z" fill="#e39a7b"/>
+    <rect x="16" y="44" width="64" height="10" rx="2" fill="#d98a6a"/>
+    <g class="vine v1"><path d="M24 50C10 62 4 86 9 108 12 124 6 138 5 150" fill="none"/>
+      ${leaf(15, 60, 50, 1)}${leaf(6, 82, -35, 2)}${leaf(8, 104, 35, 0)}${leaf(9, 126, -25, 1)}${leaf(5, 148, 0, 2, .9)}</g>
+    <g class="vine v2"><path d="M72 50C84 60 88 80 84 98 82 108 85 114 84 122" fill="none"/>
+      ${leaf(81, 60, -45, 2)}${leaf(88, 80, 35, 0)}${leaf(85, 100, -25, 1)}${leaf(84, 120, 0, 2, .9)}</g>`],
+  monstera: [130, 172, `
+    <path d="M62 140C56 110 42 92 30 80" fill="none"/>
+    <path d="M64 140C64 104 68 72 72 50" fill="none"/>
+    <path d="M66 140C80 124 96 112 108 104" fill="none"/>
+    ${mleaf(30, 80, -48, 0, '#7fa577')}
+    ${mleaf(72, 50, 6, 1, '#94b88c', 62, 56)}
+    ${mleaf(108, 104, 62, 2, '#6f9468', 48, 44)}
+    <path d="M44 140h44l-5 30H49Z" fill="#f4ece0"/>
+    <rect x="40" y="136" width="52" height="8" rx="2" fill="#efe4d3"/>`],
   lamp: [74, 128, `
     <path class="beam noline" d="M8 52L-26 126h126L66 52Z" fill="url(#beamGrad)"/>
     <ellipse class="halo noline" cx="37" cy="34" rx="44" ry="30" fill="url(#haloGrad)"/>
@@ -97,7 +126,7 @@ const ART = {
    { zine: id, lean } | { art, label?, href?, hideSm? } (no href = decoration) */
 const SHELVES = [
   [
-    { art: 'plant' },
+    { art: 'pothos', cls: 'plant pothos' },
     { zine: 'harbour', lean: -2 },
     { art: 'lamp', toggle: true, label: 'click me ✧' },
   ],
@@ -114,7 +143,7 @@ const SHELVES = [
     { art: 'frame',  label: 'gallery ↗', href: 'https://galler-bay.vercel.app/' },
     { art: 'strip',  label: 'photostrip ↗', href: 'https://photostrip-kappa.vercel.app/', lean: 4 },
     { art: 'bottle', label: 'drift ↗', href: 'https://drift-coral-iota.vercel.app/' },
-    { art: 'snake',  hideSm: true },
+    { art: 'monstera', cls: 'plant', hideSm: true },
   ],
 ];
 
@@ -260,7 +289,7 @@ SHELVES.forEach((row) => {
     }
     el.style.setProperty('--wig', (Math.random() < .5 ? -2.5 : 2.5) + 'deg');
     if (it.hideSm) el.classList.add('hide-sm');
-    if (it.cls) el.classList.add(it.cls);
+    if (it.cls) el.classList.add(...it.cls.split(' '));
     if (it.lean && !it.zine) el.style.transform = `rotate(${it.lean}deg)`;
     items.append(el);
   });

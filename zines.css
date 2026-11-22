@@ -51,12 +51,15 @@ button { font: inherit; color: inherit; }
 .doodle .line * { fill: none !important; stroke: var(--ink); stroke-width: 2.6; stroke-linejoin: round; stroke-linecap: round; }
 .doodle .line .hl, .doodle .line .noline { display: none; }
 .doodle .fill .ink { fill: var(--ink); }
+.doodle .fill .cut { fill: var(--bg) !important; }
+.doodle .line .cut { stroke-width: 1.8; }
 
 /* ---------- shelves ---------- */
 .shelf { margin-bottom: 70px; }
 .shelf-items {
   display: flex; align-items: flex-end; justify-content: center;
   gap: 28px; padding: 0 20px; margin-bottom: -3px;
+  position: relative; z-index: 2; /* trailing vines hang in front of the plank */
 }
 .plank { width: 100%; height: 18px; }
 
@@ -109,6 +112,23 @@ a.item:hover, button.item:hover, a.item:focus-visible, button.item:focus-visible
 @keyframes bk3 { 35% { transform: translate(14px, -16px) rotate(10deg); } 70% { transform: translate(-3px, -2px) rotate(-3deg); } }
 @keyframes bk2 { 35% { transform: translate(-10px, -9px) rotate(-6deg); } 70% { transform: translate(2px, -1px) rotate(2deg); } }
 @keyframes bk1 { 40% { transform: translate(3px, -3px) rotate(1.5deg); } }
+
+/* plants rustle when you brush past them */
+.plant .lf { transform-box: fill-box; transform-origin: 50% 0; }
+.plant:not(.pothos) .lf { transform-origin: 50% 100%; }
+.plant:hover .lf { animation: rustle .8s ease-in-out var(--d, 0s); }
+@keyframes rustle {
+  20% { transform: rotate(9deg); }
+  45% { transform: rotate(-7deg); }
+  70% { transform: rotate(4deg); }
+  100% { transform: rotate(0); }
+}
+/* pothos vines sway a tiny bit, more when hovered */
+.pothos .vine { transform-box: fill-box; transform-origin: 50% 0; animation: sway 6s ease-in-out infinite; }
+.pothos .v2 { animation-delay: -3s; }
+.pothos:hover .vine { animation: sway 1.2s ease-in-out; }
+@keyframes sway { 0%, 100% { transform: rotate(0); } 30% { transform: rotate(2.5deg); } 70% { transform: rotate(-2deg); } }
+.plant:hover { transform: none; }
 
 /* zine covers */
 .zine .cover {
