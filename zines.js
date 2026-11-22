@@ -128,13 +128,10 @@ const SHELVES = [
   [
     { art: 'pothos', cls: 'plant pothos' },
     { zine: 'harbour', lean: -2 },
-    { art: 'lamp', toggle: true, label: 'click me ✧' },
-  ],
-  [
-    { art: 'books', cls: 'books', hideSm: true },
-    { zine: 'november-birds', lean: 0 },
+    { zine: 'november-birds', lean: 1 },
     { zine: 'nagano', lean: -1.5 },
-    { art: 'mug', cls: 'mug' },
+    { art: 'books', cls: 'books', hideSm: true },
+    { art: 'lamp', toggle: true, label: 'click me ✧', hideSm: true },
   ],
   [
     { art: 'camera', label: 'photography ↗', href: 'https://www.instagram.com/diladialed/' },
@@ -143,6 +140,7 @@ const SHELVES = [
     { art: 'frame',  label: 'gallery ↗', href: 'https://galler-bay.vercel.app/' },
     { art: 'strip',  label: 'photostrip ↗', href: 'https://photostrip-kappa.vercel.app/', lean: 4 },
     { art: 'bottle', label: 'drift ↗', href: 'https://drift-coral-iota.vercel.app/' },
+    { art: 'mug', cls: 'mug', hideSm: true },
     { art: 'monstera', cls: 'plant', hideSm: true },
   ],
 ];
