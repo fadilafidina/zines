@@ -5,7 +5,6 @@
 
 const ZINES = {
   'harbour':        { title: 'the harbour and the change', meta: 'october 2026' },
-  'harbour-photos': { title: 'the harbour and the change (photos only)', meta: 'october 2026' },
   'november-birds': { title: 'november birds', meta: '2026' },
   'nagano':         { title: 'november in nagano', meta: '2025' },
 };
@@ -94,7 +93,6 @@ const SHELVES = [
   [
     { art: 'plant' },
     { zine: 'harbour', lean: -2 },
-    { zine: 'harbour-photos', lean: 1.5 },
     { art: 'lamp', hideSm: true },
   ],
   [
@@ -168,33 +166,30 @@ SHELVES.forEach((row) => {
   shelvesEl.append(shelf);
 });
 
-/* ---------- viewer ---------- */
+/* ---------- viewer: big pages, scroll sideways ---------- */
 const viewer = $('#viewer');
 const acc = $('#accordion');
-const foldBtn = $('#foldBtn');
-let currentId = null, opener = null;
+let opener = null;
 
 function openZine(id, from) {
-  currentId = id; opener = from;
+  opener = from;
   const z = ZINES[id];
   $('#viewerTitle').textContent = z.title;
   $('#viewerMeta').textContent = z.meta || '';
   acc.innerHTML = '';
   for (let n = 1; n <= 8; n++) {
-    const p = document.createElement('button');
+    const p = document.createElement('figure');
     p.className = 'panel';
     p.style.setProperty('--i', n - 1);
-    p.setAttribute('aria-label', `${pageName(n)}, open larger`);
-    p.innerHTML = `<img src="${page(id, n)}" alt="" draggable="false">`;
-    p.addEventListener('click', () => { if (!acc.classList.contains('folded')) zoomTo(n); });
+    p.innerHTML = `<img src="${page(id, n)}" alt="${esc(z.title)}, ${pageName(n)}" draggable="false">`;
     acc.append(p);
   }
+  acc.scrollLeft = 0;
   acc.classList.add('folded');
-  foldBtn.textContent = 'fold it up';
   viewer.hidden = false;
   document.body.style.overflow = 'hidden';
   requestAnimationFrame(() => requestAnimationFrame(() => acc.classList.remove('folded')));
-  $('#viewerClose').focus();
+  acc.focus({ preventScroll: true });
 }
 
 function closeZine() {
@@ -202,37 +197,29 @@ function closeZine() {
   document.body.style.overflow = '';
   opener?.focus();
 }
-
-foldBtn.addEventListener('click', () => {
-  const folded = acc.classList.toggle('folded');
-  foldBtn.textContent = folded ? 'unfold it' : 'fold it up';
-});
 $('#viewerClose').addEventListener('click', closeZine);
 
-/* ---------- single page ---------- */
-const zoom = $('#zoom');
-let zn = 1;
-function zoomTo(n) {
-  zn = Math.min(8, Math.max(1, n));
-  const img = $('img', zoom);
-  img.src = page(currentId, zn);
-  img.alt = `${ZINES[currentId].title}, ${pageName(zn)}`;
-  $('figcaption', zoom).textContent = `${pageName(zn)} · ${zn} of 8`;
-  zoom.querySelector('[data-d="-1"]').disabled = zn === 1;
-  zoom.querySelector('[data-d="1"]').disabled = zn === 8;
-  if (zoom.hidden) { zoom.hidden = false; $('.zoom-close', zoom).focus(); }
-}
-function closeZoom() { zoom.hidden = true; acc.children[zn - 1]?.focus(); }
-zoom.addEventListener('click', (e) => {
-  const nav = e.target.closest('.nav');
-  if (nav) return zoomTo(zn + +nav.dataset.d);
-  if (e.target.closest('.zoom-close') || e.target === zoom) closeZoom();
+/* the mouse wheel moves the pages sideways */
+acc.addEventListener('wheel', (e) => {
+  if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return; // trackpad sideways swipe: leave it
+  e.preventDefault();
+  acc.scrollLeft += e.deltaY;
+}, { passive: false });
+
+/* drag to scroll with the mouse */
+let drag = null;
+acc.addEventListener('pointerdown', (e) => {
+  if (e.pointerType !== 'mouse') return;
+  drag = { x: e.clientX, left: acc.scrollLeft };
+  acc.classList.add('dragging');
 });
+addEventListener('pointermove', (e) => { if (drag) acc.scrollLeft = drag.left - (e.clientX - drag.x); });
+addEventListener('pointerup', () => { drag = null; acc.classList.remove('dragging'); });
 
 document.addEventListener('keydown', (e) => {
-  if (!zoom.hidden) {
-    if (e.key === 'Escape') closeZoom();
-    if (e.key === 'ArrowRight') zoomTo(zn + 1);
-    if (e.key === 'ArrowLeft') zoomTo(zn - 1);
-  } else if (!viewer.hidden && e.key === 'Escape') closeZine();
+  if (viewer.hidden) return;
+  const step = acc.firstElementChild?.offsetWidth || 300;
+  if (e.key === 'Escape') closeZine();
+  if (e.key === 'ArrowRight') { e.preventDefault(); acc.scrollBy({ left: step, behavior: 'smooth' }); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); acc.scrollBy({ left: -step, behavior: 'smooth' }); }
 });

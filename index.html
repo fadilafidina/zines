@@ -35,20 +35,10 @@
     </div>
     <button class="txt-btn" id="viewerClose">close ✕</button>
   </div>
-  <div class="accordion" id="accordion" tabindex="0" aria-label="Zine pages"></div>
-  <div class="viewer-foot">
-    <button class="txt-btn" id="foldBtn">fold it up</button>
-    <span>click a page to read it up close</span>
-  </div>
+  <div class="accordion" id="accordion" tabindex="0" aria-label="Zine pages, scroll sideways"></div>
+  <p class="viewer-foot"><span class="hint-d">scroll to turn the pages →</span><span class="hint-m">swipe to turn the pages →</span></p>
 </div>
 
-<!-- single page -->
-<div class="zoom" id="zoom" role="dialog" aria-modal="true" aria-label="Page" hidden>
-  <button class="nav" data-d="-1" aria-label="Previous page">←</button>
-  <figure><img alt=""><figcaption></figcaption></figure>
-  <button class="nav" data-d="1" aria-label="Next page">→</button>
-  <button class="txt-btn zoom-close">close ✕</button>
-</div>
 
 <script src="zines.js"></script>
 </body>
