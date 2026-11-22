@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>dila's zine shelf</title>
+  <meta name="description" content="A little shelf of mini zines by Fadila, plus the other things she makes.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <link rel="icon" href="../favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="stylesheet" href="zines.css">
+</head>
+<body>
+
+<main class="room">
+  <header class="head">
+    <h1>dila's zine shelf</h1>
+    <p>Mini zines folded from one sheet of paper. Pick one up to read it.</p>
+  </header>
+
+  <section class="shelves" id="shelves" aria-label="Shelf"></section>
+
+  <footer class="foot"><a href="../">← back to fadila.exe</a></footer>
+</main>
+
+<!-- zine viewer -->
+<div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-labelledby="viewerTitle" hidden>
+  <div class="viewer-head">
+    <div>
+      <h2 id="viewerTitle"></h2>
+      <p id="viewerMeta"></p>
+    </div>
+    <button class="txt-btn" id="viewerClose">close ✕</button>
+  </div>
+  <div class="accordion" id="accordion" tabindex="0" aria-label="Zine pages"></div>
+  <div class="viewer-foot">
+    <button class="txt-btn" id="foldBtn">fold it up</button>
+    <span>click a page to read it up close</span>
+  </div>
+</div>
+
+<!-- single page -->
+<div class="zoom" id="zoom" role="dialog" aria-modal="true" aria-label="Page" hidden>
+  <button class="nav" data-d="-1" aria-label="Previous page">←</button>
+  <figure><img alt=""><figcaption></figcaption></figure>
+  <button class="nav" data-d="1" aria-label="Next page">→</button>
+  <button class="txt-btn zoom-close">close ✕</button>
+</div>
+
+<script src="zines.js"></script>
+</body>
+</html>
