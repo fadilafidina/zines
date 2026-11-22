@@ -79,6 +79,37 @@ a.item:hover, button.item:hover, a.item:focus-visible, button.item:focus-visible
 }
 .item:hover .label, .item:focus-visible .label { opacity: 1; transform: translate(-50%, 0); }
 
+/* ---------- little interactions ---------- */
+/* lamp: click to switch on and off */
+.lamp .beam, .lamp .halo { opacity: 0; transition: opacity .45s ease; }
+.lamp.on .beam { opacity: 1; }
+.lamp.on .halo { opacity: .9; }
+.lamp .fill .shade { fill: #ece4c8; transition: fill .3s ease; }
+.lamp.on .fill .shade { fill: #ffd95e; }
+.lamp:active { transform: translateY(-4px) scale(.97); }
+
+/* steam drifts up from the mug and the mascot */
+.doodle .steam {
+  transform-box: fill-box; transform-origin: 50% 100%;
+  animation: steam 3.2s ease-in-out infinite;
+}
+.doodle .steam.s2 { animation-delay: -1.6s; }
+@keyframes steam {
+  0%   { transform: translateY(4px) scaleX(.9); opacity: 0; }
+  25%  { opacity: 1; }
+  60%  { transform: translateY(-3px) scaleX(1.12) skewX(-6deg); opacity: .8; }
+  100% { transform: translateY(-9px) scaleX(.95) skewX(4deg); opacity: 0; }
+}
+
+/* books shuffle and restack on hover */
+.books .bk { transform-box: fill-box; transform-origin: 50% 100%; }
+.books:hover .bk3 { animation: bk3 .9s cubic-bezier(.3, 1.3, .5, 1); }
+.books:hover .bk2 { animation: bk2 .9s cubic-bezier(.3, 1.3, .5, 1) .06s; }
+.books:hover .bk1 { animation: bk1 .9s cubic-bezier(.3, 1.3, .5, 1) .12s; }
+@keyframes bk3 { 35% { transform: translate(14px, -16px) rotate(10deg); } 70% { transform: translate(-3px, -2px) rotate(-3deg); } }
+@keyframes bk2 { 35% { transform: translate(-10px, -9px) rotate(-6deg); } 70% { transform: translate(2px, -1px) rotate(2deg); } }
+@keyframes bk1 { 40% { transform: translate(3px, -3px) rotate(1.5deg); } }
+
 /* zine covers */
 .zine .cover {
   width: 132px; aspect-ratio: 105 / 148.5; overflow: hidden; background: #ddd;

@@ -27,17 +27,18 @@ const ART = {
     <path d="M34 94c8-22 14-42 14-62-10 20-16 40-18 62Z" fill="#7fa577"/>
     <rect x="12" y="90" width="36" height="40" rx="4" fill="#f4ece0"/>`],
   lamp: [74, 128, `
-    <path d="M18 8h38l14 42H4Z" fill="#f6d77c"/>
+    <path class="beam noline" d="M8 52L-26 126h126L66 52Z" fill="url(#beamGrad)"/>
+    <ellipse class="halo noline" cx="37" cy="34" rx="44" ry="30" fill="url(#haloGrad)"/>
+    <path class="shade" d="M18 8h38l14 42H4Z" fill="#f6d77c"/>
     <rect x="35" y="50" width="4" height="66" fill="#f4ece0"/>
     <ellipse cx="37" cy="120" rx="20" ry="6" fill="#f4ece0"/>
-    <path class="hl" d="M14 34l-6 14M20 36l-3 10" fill="none" stroke="#fff" stroke-width="3" opacity=".7"/>`],
+    <path d="M48 112v-14" fill="none"/><circle cx="48" cy="96" r="2.5" fill="#f4ece0"/>`],
   books: [96, 72, `
-    <rect x="6" y="54" width="84" height="18" rx="2" fill="#9cc0dc"/>
-    <rect x="12" y="38" width="72" height="16" rx="2" fill="#f2b8c2"/>
-    <rect x="18" y="24" width="62" height="14" rx="2" fill="#f4ece0"/>
-    <path d="M12 54v18M78 38v16" fill="none"/>`],
+    <g class="bk bk1"><rect x="6" y="54" width="84" height="18" rx="2" fill="#9cc0dc"/><path d="M12 54v18" fill="none"/></g>
+    <g class="bk bk2"><rect x="12" y="38" width="72" height="16" rx="2" fill="#f2b8c2"/><path d="M78 38v16" fill="none"/></g>
+    <g class="bk bk3"><rect x="18" y="24" width="62" height="14" rx="2" fill="#f4ece0"/></g>`],
   mug: [66, 72, `
-    <path d="M22 4c-6 6 6 10 0 16M34 4c-6 6 6 10 0 16" fill="none"/>
+    <path class="steam" d="M22 4c-6 6 6 10 0 16" fill="none"/><path class="steam s2" d="M34 4c-6 6 6 10 0 16" fill="none"/>
     <path d="M46 34h6a10 10 0 0 1 0 20h-6v-6h6a4 4 0 0 0 0-8h-6Z" fill="#e39a7b"/>
     <rect x="8" y="28" width="40" height="42" rx="6" fill="#e39a7b"/>
     <circle class="ink" cx="21" cy="46" r="2"/><circle class="ink" cx="35" cy="46" r="2"/>
@@ -84,7 +85,7 @@ const ART = {
     <rect class="hl" x="9" y="58" width="4" height="30" rx="2" fill="#fff"/>`],
   /* little matcha mascot for the header */
   mascot: [72, 72, `
-    <path d="M44 4c-5 5 5 8 0 13M54 6c-5 5 5 8 0 13" fill="none"/>
+    <path class="steam" d="M44 4c-5 5 5 8 0 13" fill="none"/><path class="steam s2" d="M54 6c-5 5 5 8 0 13" fill="none"/>
     <path d="M6 24h60l-6 36a9 9 0 0 1-9 8H21a9 9 0 0 1-9-8Z" fill="#f4ece0"/>
     <ellipse cx="36" cy="24" rx="30" ry="7" fill="#a5c773"/>
     <circle class="ink" cx="26" cy="42" r="2.6"/><circle class="ink" cx="46" cy="42" r="2.6"/>
@@ -98,13 +99,13 @@ const SHELVES = [
   [
     { art: 'plant' },
     { zine: 'harbour', lean: -2 },
-    { art: 'lamp', hideSm: true },
+    { art: 'lamp', toggle: true, label: 'click me ✧' },
   ],
   [
-    { art: 'books', hideSm: true },
+    { art: 'books', cls: 'books', hideSm: true },
     { zine: 'november-birds', lean: 0 },
     { zine: 'nagano', lean: -1.5 },
-    { art: 'mug' },
+    { art: 'mug', cls: 'mug' },
   ],
   [
     { art: 'camera', label: 'photography ↗', href: 'https://www.instagram.com/diladialed/' },
@@ -194,6 +195,11 @@ const sfx = (() => {
     get on() { return on; },
     toggle() { on = !on; try { localStorage.setItem('zine-sound', on ? 'on' : 'off'); } catch (e) {} if (on) ac(); return on; },
     pickUp() { if (!on) return; burst({ dur: .3, f: 900, to: 3800, q: .7, gain: .32 }); burst({ at: .07, dur: .14, f: 4200, q: 1.4, gain: .12 }); },
+    click(on) {
+      if (!this.on) return;
+      burst({ dur: .03, f: on ? 3800 : 2600, q: 3, gain: .2 });
+      burst({ at: .045, dur: .025, f: on ? 2400 : 3600, q: 3, gain: .12 });
+    },
     putDown() { if (!on) return; burst({ dur: .22, f: 3200, to: 700, q: .8, gain: .26 }); thump(.22); },
     rustle(speed) {
       if (!on) return;
@@ -228,6 +234,17 @@ SHELVES.forEach((row) => {
       el.setAttribute('aria-label', `Read ${z.title}`);
       el.innerHTML = `<div class="cover"><img src="${page(it.zine, 1)}" alt="" draggable="false"></div><span class="label">${esc(z.title)}</span>`;
       el.addEventListener('click', () => openZine(it.zine, el));
+    } else if (it.toggle) {
+      el = document.createElement('button');
+      el.className = 'item lamp';
+      el.setAttribute('aria-label', 'Desk lamp');
+      el.setAttribute('aria-pressed', 'false');
+      el.innerHTML = doodle(it.art) + `<span class="label">${esc(it.label)}</span>`;
+      el.addEventListener('click', () => {
+        const on = el.classList.toggle('on');
+        el.setAttribute('aria-pressed', on);
+        sfx.click(on);
+      });
     } else if (it.href) {
       el = document.createElement('a');
       el.className = 'item';
@@ -243,6 +260,7 @@ SHELVES.forEach((row) => {
     }
     el.style.setProperty('--wig', (Math.random() < .5 ? -2.5 : 2.5) + 'deg');
     if (it.hideSm) el.classList.add('hide-sm');
+    if (it.cls) el.classList.add(it.cls);
     if (it.lean && !it.zine) el.style.transform = `rotate(${it.lean}deg)`;
     items.append(el);
   });
