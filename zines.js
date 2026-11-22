@@ -366,18 +366,26 @@ stage.addEventListener('wheel', (e) => {
 /* touch and mouse drag */
 let drag = null;
 stage.addEventListener('pointerdown', (e) => {
-  drag = { x: e.clientX, y: e.clientY };
+  drag = { x: e.clientX, y: e.clientY, moved: 0, onZine: !!e.target.closest('.panel') };
   stage.setPointerCapture(e.pointerId);
   stage.classList.add('dragging');
 });
 stage.addEventListener('pointermove', (e) => {
   if (!drag) return;
   const dx = drag.x - e.clientX, dy = drag.y - e.clientY;
-  drag = { x: e.clientX, y: e.clientY };
+  drag = { ...drag, x: e.clientX, y: e.clientY, moved: drag.moved + Math.abs(dx) + Math.abs(dy) };
   move((Math.abs(dx) >= Math.abs(dy) ? dx : dy) * 1.6);
 });
 const endDrag = () => { drag = null; stage.classList.remove('dragging'); };
-stage.addEventListener('pointerup', endDrag);
+/* a plain click (not a drag) anywhere off the zine puts it back */
+stage.addEventListener('pointerup', (e) => {
+  const tap = drag && drag.moved < 6 && !drag.onZine;
+  endDrag();
+  if (tap) closeZine();
+});
+viewer.addEventListener('click', (e) => {
+  if (e.target === viewer || e.target.closest('.viewer-title, .viewer-hint')) closeZine();
+});
 stage.addEventListener('pointercancel', endDrag);
 
 document.addEventListener('keydown', (e) => {
