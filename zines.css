@@ -10,12 +10,15 @@
 
 * { box-sizing: border-box; }
 html, body { margin: 0; }
+/* the shelf fits one screen: no page scroll */
+html, body { height: 100%; overflow: hidden; }
 body {
   overflow-x: clip; background-color: var(--bg);
   background-image:
     radial-gradient(circle, rgba(43,42,40,.16) 1px, transparent 1.4px),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .4 0 0 0 0 .33 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 24px 24px, 220px 220px;
+  display: flex; flex-direction: column; height: 100dvh;
   background-attachment: fixed; color: var(--ink); font-family: var(--hand); -webkit-font-smoothing: antialiased; }
 img, svg { display: block; }
 button { font: inherit; color: inherit; }
@@ -31,7 +34,7 @@ button { font: inherit; color: inherit; }
   font-size: 34px; letter-spacing: .32em; color: var(--ink); text-decoration: none;
 }
 .mascot { display: block; transition: transform .4s cubic-bezier(.3, 1.6, .5, 1); }
-.mascot:hover, .mascot:focus-visible { transform: rotate(-10deg) scale(1.06); }
+.mascot:hover { transform: rotate(-10deg) scale(1.06); }
 .mascot svg { width: 96px; height: auto; }
 .top-right { justify-self: end; text-align: right; }
 .clock { font-size: 28px; line-height: 1.05; letter-spacing: .26em; color: var(--muted); white-space: pre; }
@@ -41,8 +44,11 @@ button { font: inherit; color: inherit; }
 }
 .sound:hover, .sound:focus-visible { color: var(--ink); }
 
-.room { max-width: 1120px; margin: 0 auto; padding: 22px 24px 48px; }
-.sub { text-align: center; font-size: 21px; color: var(--muted); margin: 0 0 64px; letter-spacing: .03em; }
+.room {
+  flex: 1; min-height: 0; width: 100%; max-width: 1120px; margin: 0 auto;
+  display: flex; flex-direction: column; padding: clamp(10px, 2.5vh, 22px) 24px clamp(12px, 3vh, 32px);
+}
+.sub { text-align: center; font-size: 21px; color: var(--muted); margin: 0; letter-spacing: .03em; }
 
 /* ---------- hand-drawn things ---------- */
 .doodle { overflow: visible; }
@@ -55,8 +61,12 @@ button { font: inherit; color: inherit; }
 .doodle .line .cut { stroke-width: 1.8; }
 
 /* ---------- shelves ---------- */
-.shelves { position: relative; }
-.shelf { margin-bottom: 110px; }
+.shelves {
+  position: relative; flex: 1; min-height: 0;
+  display: flex; flex-direction: column; justify-content: space-evenly;
+}
+/* --fit shrinks the shelves on short screens (set in zines.js) */
+.shelf { position: relative; zoom: var(--fit, 1); }
 .shelf.short { width: 74%; margin-right: auto; }
 .shelf.long { width: 95%; margin-left: auto; }
 .shelf.short .shelf-items, .shelf.long .shelf-items { justify-content: space-evenly; padding: 0 4.5%; }
@@ -64,7 +74,7 @@ button { font: inherit; color: inherit; }
 .shelf-items > .item > .doodle { margin-bottom: -5px; }
 
 /* painting pinned to the wall */
-.item.pinned { position: absolute; right: 9%; top: 20px; transform: rotate(4deg); transform-origin: 50% 0; }
+.item.pinned { position: absolute; right: -23%; top: 20px; transform: rotate(4deg); transform-origin: 50% 0; }
 .pinned .pin { position: absolute; left: 50%; top: -6px; transform: translateX(-50%); z-index: 2; }
 .pinned .pin .doodle { width: 22px; height: auto; }
 .item.pinned:hover, .item.pinned:focus-visible { transform: rotate(-2deg); }
@@ -153,7 +163,7 @@ a.item:hover, button.item:hover, a.item:focus-visible, button.item:focus-visible
 .zine .cover img { width: 100%; height: 100%; object-fit: cover; }
 .zine:hover .cover, .zine:focus-visible .cover { transform: rotate(0deg); }
 
-.foot { text-align: center; margin-top: 30px; font-size: 20px; color: var(--muted); }
+.foot { text-align: center; margin-top: 0; font-size: 20px; color: var(--muted); }
 .foot a { color: var(--muted); text-decoration: none; border-bottom: 1.5px dashed currentColor; }
 .foot a:hover { color: var(--ink); }
 
@@ -166,7 +176,7 @@ a.item:hover, button.item:hover, a.item:focus-visible, button.item:focus-visible
   animation: fade .35s ease;
 }
 .viewer.closing { animation: fadeout .3s ease forwards; }
-.viewer.closing .strip { animation: putdown .3s ease-in forwards; }
+.viewer.closing .stage { animation: putdown .3s ease-in forwards; }
 @keyframes fadeout { to { opacity: 0; } }
 @keyframes putdown { to { transform: translateY(60px) scale(.8) rotate(3deg); opacity: 0; } }
 .viewer[hidden] { display: none; }
@@ -177,9 +187,12 @@ a.item:hover, button.item:hover, a.item:focus-visible, button.item:focus-visible
   position: relative; flex: 1; width: 100%;
   display: flex; align-items: center;
   perspective: 1900px; outline: none; cursor: grab; touch-action: none; user-select: none;
+  /* animate the pickup here, not on .strip: opacity/transform on the preserve-3d
+     element flattens the folds until the animation ends, then they pop into 3D */
+  animation: pickup .9s cubic-bezier(.22, 1.2, .36, 1);
 }
 .stage.dragging { cursor: grabbing; }
-.strip { position: relative; width: 100%; transform-style: preserve-3d; animation: pickup .9s cubic-bezier(.22, 1.2, .36, 1); will-change: transform; }
+.strip { position: relative; width: 100%; transform-style: preserve-3d; }
 @keyframes pickup { 0% { transform: translateY(70px) scale(.7) rotate(-4deg); opacity: 0; } 60% { opacity: 1; } }
 .panel {
   position: absolute; left: 0; top: 0; margin: 0;
@@ -206,17 +219,15 @@ a.item:hover, button.item:hover, a.item:focus-visible, button.item:focus-visible
   .top-right { grid-area: right; justify-self: start; text-align: left; display: flex; gap: 14px; align-items: baseline; }
   .clock { font-size: 17px; letter-spacing: .14em; white-space: normal; }
   .sound { font-size: 15px; margin: 0; }
-  .sub { font-size: 18px; margin-bottom: 50px; }
-  .shelf { margin-bottom: 56px; }
+  .sub { font-size: 18px; }
   .shelf-items { gap: 9px; padding: 0 2px; }
   .zine .cover { width: 76px; }
   .item .doodle { width: calc(var(--w) * .6px); height: auto; }
-  .shelf { margin-bottom: 90px; }
   .item.hide-sm { display: none; }
   .shelf.short, .shelf.long { width: 100%; }
   .shelf.short { width: 100%; }
   .shelf.short .shelf-items, .shelf.long .shelf-items { padding: 0 5%; }
-  .item.pinned { right: 7%; top: 168px; transform: rotate(-4deg); }
+  .item.pinned { right: 7%; top: calc(100% + 58px); transform: rotate(-4deg); }
   .pinned .doodle:not(.pin .doodle) { width: 56px; }
   .label { display: none; }
   .viewer { padding-top: 130px; }

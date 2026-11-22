@@ -133,12 +133,9 @@ const SHELVES = [
   ] },
   { cls: 'long', items: [
     { art: 'books', cls: 'books', hideSm: true },
-    { art: 'matcha', label: 'matchadou bakes ↗', href: 'https://www.instagram.com/matchadou/' },
     { zine: 'nagano', lean: -1.5 },
-    { art: 'paint',  label: 'paintings →', href: '../#painting' },
     { art: 'mug', cls: 'mug', hideSm: true },
     { art: 'strip',  label: 'photostrip ↗', href: 'https://photostrip-kappa.vercel.app/', lean: 4 },
-    { art: 'bottle', label: 'drift ↗', href: 'https://drift-coral-iota.vercel.app/' },
     { art: 'monstera', cls: 'plant', hideSm: true },
   ] },
 ];
@@ -304,8 +301,21 @@ SHELVES.forEach(({ cls, items: row }) => {
   w.href = WALL.href; w.target = '_blank'; w.rel = 'noopener';
   w.setAttribute('aria-label', WALL.label.replace(/[↗→]/g, '').trim());
   w.innerHTML = `<span class="pin">${doodle('pin')}</span>${doodle(WALL.art)}<span class="label">${esc(WALL.label)}</span>`;
-  shelvesEl.prepend(w);
+  shelvesEl.querySelector('.shelf.short').append(w);
 }
+
+/* shrink the shelves if they'd overflow the screen */
+function fitShelves() {
+  shelvesEl.style.setProperty('--fit', 1);
+  const shelves = [...shelvesEl.querySelectorAll('.shelf')];
+  const need = shelves.reduce((h, s) => h + s.offsetHeight, 0) + 24 * shelves.length;
+  const fit = clamp(shelvesEl.clientHeight / need, .45, 1);
+  shelvesEl.style.setProperty('--fit', fit.toFixed(3));
+}
+fitShelves();
+addEventListener('resize', fitShelves);
+document.fonts?.ready.then(fitShelves);
+document.querySelectorAll('.zine img').forEach((i) => i.complete || i.addEventListener('load', fitShelves, { once: true }));
 
 /* ============ viewer: scrunched → unfolds → slides ============ */
 const viewer = $('#viewer');
@@ -385,7 +395,7 @@ function openZine(id, from) {
   scrollTo(0, 0);
   viewer.hidden = false;
   document.body.style.overflow = 'hidden';
-  strip.style.animation = 'none'; strip.offsetHeight; strip.style.animation = '';
+  stage.style.animation = 'none'; stage.offsetHeight; stage.style.animation = '';
   measure();
   target = pos = 0;
   base = 88 * D; baseTarget = FOLD;   // starts nearly shut, settles into the scrunch
@@ -452,5 +462,9 @@ document.addEventListener('keydown', (e) => {
 
 addEventListener('resize', () => {
   if (viewer.hidden) return;
-  measure(); baseTarget = base = FOLD; target = clamp(target, 0, UNFOLD + PAN); pos = target; render();
+  measure();
+  // keep easing instead of snapping to the new layout
+  if (!viewer.classList.contains('closing')) baseTarget = FOLD;
+  target = clamp(target, 0, UNFOLD + PAN); pos = clamp(pos, 0, UNFOLD + PAN);
+  render(); kick();
 });
