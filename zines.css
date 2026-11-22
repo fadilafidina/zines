@@ -41,7 +41,7 @@ button { font: inherit; color: inherit; }
 }
 .sound:hover, .sound:focus-visible { color: var(--ink); }
 
-.room { max-width: 1000px; margin: 0 auto; padding: 22px 24px 48px; }
+.room { max-width: 1120px; margin: 0 auto; padding: 22px 24px 48px; }
 .sub { text-align: center; font-size: 21px; color: var(--muted); margin: 0 0 64px; letter-spacing: .03em; }
 
 /* ---------- hand-drawn things ---------- */
@@ -57,10 +57,11 @@ button { font: inherit; color: inherit; }
 /* ---------- shelves ---------- */
 .shelves { position: relative; }
 .shelf { margin-bottom: 110px; }
-.shelf.short { width: 66%; margin-right: auto; }
-.shelf.long { width: 90%; margin-left: auto; }
-.shelf.short .shelf-items { justify-content: space-evenly; }
-.shelf.long .shelf-items { justify-content: space-evenly; }
+.shelf.short { width: 74%; margin-right: auto; }
+.shelf.long { width: 95%; margin-left: auto; }
+.shelf.short .shelf-items, .shelf.long .shelf-items { justify-content: space-evenly; padding: 0 4.5%; }
+/* drawings have a little padding under them: sink them onto the plank */
+.shelf-items > .item > .doodle { margin-bottom: -5px; }
 
 /* painting pinned to the wall */
 .item.pinned { position: absolute; right: 9%; top: 20px; transform: rotate(4deg); transform-origin: 50% 0; }
@@ -197,7 +198,7 @@ a.item:hover, button.item:hover, a.item:focus-visible, button.item:focus-visible
 .back:hover, .back:focus-visible { color: var(--ink); }
 
 /* ---------- phones ---------- */
-@media (max-width: 700px) {
+@media (max-width: 900px) {
   .top { grid-template-columns: 1fr auto; grid-template-areas: "title mascot" "right mascot"; padding: 22px 20px 0; row-gap: 4px; }
   .title { grid-area: title; font-size: 23px; letter-spacing: .2em; }
   .mascot { grid-area: mascot; }
@@ -214,6 +215,7 @@ a.item:hover, button.item:hover, a.item:focus-visible, button.item:focus-visible
   .item.hide-sm { display: none; }
   .shelf.short, .shelf.long { width: 100%; }
   .shelf.short { width: 100%; }
+  .shelf.short .shelf-items, .shelf.long .shelf-items { padding: 0 5%; }
   .item.pinned { right: 7%; top: 168px; transform: rotate(-4deg); }
   .pinned .doodle:not(.pin .doodle) { width: 56px; }
   .label { display: none; }
@@ -225,4 +227,16 @@ a.item:hover, button.item:hover, a.item:focus-visible, button.item:focus-visible
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* in-between widths: fewer things so nothing hangs off a shelf */
+@media (min-width: 901px) and (max-width: 1120px) {
+  .item.books, .item.mug { display: none; }
+}
+@media (max-width: 380px) {
+  .zine .cover { width: 66px; }
+  .shelf-items { gap: 6px; }
+}
+@media (min-width: 901px) and (max-width: 999px) {
+  .item.lamp { display: none; }
 }
