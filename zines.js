@@ -70,9 +70,7 @@ const ART = {
     <path class="steam" d="M22 4c-6 6 6 10 0 16" fill="none"/><path class="steam s2" d="M34 4c-6 6 6 10 0 16" fill="none"/>
     <path d="M46 34h6a10 10 0 0 1 0 20h-6v-6h6a4 4 0 0 0 0-8h-6Z" fill="#e39a7b"/>
     <rect x="8" y="28" width="40" height="42" rx="6" fill="#e39a7b"/>
-    <circle class="ink" cx="21" cy="46" r="2"/><circle class="ink" cx="35" cy="46" r="2"/>
-    <path d="M25 52q3 3 6 0" fill="none"/>
-    <ellipse class="hl" cx="16" cy="52" rx="3.5" ry="2" fill="#f6b3c0"/><ellipse class="hl" cx="40" cy="52" rx="3.5" ry="2" fill="#f6b3c0"/>`],
+`],
   camera: [98, 70, `
     <rect x="14" y="6" width="22" height="12" rx="2" fill="#6d6a66"/>
     <rect x="72" y="8" width="12" height="8" rx="2" fill="#d8d2c8"/>
@@ -112,38 +110,41 @@ const ART = {
     <rect x="16" y="56" width="18" height="36" rx="3" fill="#f8edd2"/>
     <path d="M16 72h18" fill="none"/>
     <rect class="hl" x="9" y="58" width="4" height="30" rx="2" fill="#fff"/>`],
+  pin: [16, 16, `
+    <circle cx="8" cy="8" r="7" fill="#e8737a"/>
+    <circle class="hl" cx="5.5" cy="5.5" r="2" fill="#fff" opacity=".8"/>`],
   /* little matcha mascot for the header */
   mascot: [72, 72, `
     <path class="steam" d="M44 4c-5 5 5 8 0 13" fill="none"/><path class="steam s2" d="M54 6c-5 5 5 8 0 13" fill="none"/>
     <path d="M6 24h60l-6 36a9 9 0 0 1-9 8H21a9 9 0 0 1-9-8Z" fill="#f4ece0"/>
     <ellipse cx="36" cy="24" rx="30" ry="7" fill="#a5c773"/>
-    <circle class="ink" cx="26" cy="42" r="2.6"/><circle class="ink" cx="46" cy="42" r="2.6"/>
-    <path d="M31 47q2.5 3 5 0q2.5 3 5 0" fill="none"/>
-    <ellipse class="hl" cx="19" cy="49" rx="4.5" ry="2.6" fill="#f6b3c0"/><ellipse class="hl" cx="53" cy="49" rx="4.5" ry="2.6" fill="#f6b3c0"/>`],
+`],
 };
 
 /* What sits on each shelf, left to right.
    { zine: id, lean } | { art, label?, href?, hideSm? } (no href = decoration) */
 const SHELVES = [
-  [
+  { cls: 'short', items: [
     { art: 'pothos', cls: 'plant pothos' },
     { zine: 'harbour', lean: -2 },
-    { zine: 'november-birds', lean: 1 },
-    { zine: 'nagano', lean: -1.5 },
-    { art: 'books', cls: 'books', hideSm: true },
-    { art: 'lamp', toggle: true, label: 'click me ✧', hideSm: true },
-  ],
-  [
     { art: 'camera', label: 'photography ↗', href: 'https://www.instagram.com/diladialed/' },
+    { zine: 'november-birds', lean: 2 },
+    { art: 'lamp', toggle: true, label: 'click me ✧', hideSm: true },
+  ] },
+  { cls: 'long', items: [
+    { art: 'books', cls: 'books', hideSm: true },
     { art: 'matcha', label: 'matchadou bakes ↗', href: 'https://www.instagram.com/matchadou/' },
+    { zine: 'nagano', lean: -1.5 },
     { art: 'paint',  label: 'paintings →', href: '../#painting' },
-    { art: 'frame',  label: 'gallery ↗', href: 'https://galler-bay.vercel.app/' },
+    { art: 'mug', cls: 'mug', hideSm: true },
     { art: 'strip',  label: 'photostrip ↗', href: 'https://photostrip-kappa.vercel.app/', lean: 4 },
     { art: 'bottle', label: 'drift ↗', href: 'https://drift-coral-iota.vercel.app/' },
-    { art: 'mug', cls: 'mug', hideSm: true },
     { art: 'monstera', cls: 'plant', hideSm: true },
-  ],
+  ] },
 ];
+
+/* Pinned to the wall, to the right of the short shelf */
+const WALL = { art: 'frame', label: 'gallery ↗', href: 'https://galler-bay.vercel.app/' };
 
 /* ---------- helpers ---------- */
 const $ = (s, el = document) => el.querySelector(s);
@@ -245,9 +246,9 @@ soundBtn.addEventListener('click', () => { sfx.toggle(); paintSound(); });
 
 /* ---------- build the shelves ---------- */
 const shelvesEl = $('#shelves');
-SHELVES.forEach((row) => {
+SHELVES.forEach(({ cls, items: row }) => {
   const shelf = document.createElement('div');
-  shelf.className = 'shelf';
+  shelf.className = 'shelf ' + cls;
   const items = document.createElement('div');
   items.className = 'shelf-items';
 
@@ -296,6 +297,15 @@ SHELVES.forEach((row) => {
   shelf.insertAdjacentHTML('beforeend', plank());
   shelvesEl.append(shelf);
 });
+
+{
+  const w = document.createElement('a');
+  w.className = 'item pinned';
+  w.href = WALL.href; w.target = '_blank'; w.rel = 'noopener';
+  w.setAttribute('aria-label', WALL.label.replace(/[↗→]/g, '').trim());
+  w.innerHTML = `<span class="pin">${doodle('pin')}</span>${doodle(WALL.art)}<span class="label">${esc(WALL.label)}</span>`;
+  shelvesEl.prepend(w);
+}
 
 /* ============ viewer: scrunched → unfolds → slides ============ */
 const viewer = $('#viewer');
