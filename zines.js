@@ -135,13 +135,13 @@ const SHELVES = [
     { art: 'books', cls: 'books', hideSm: true },
     { zine: 'nagano', lean: -1.5 },
     { art: 'mug', cls: 'mug', hideSm: true },
-    { art: 'strip',  label: 'photostrip ↗', href: 'https://photostrip-kappa.vercel.app/', lean: 4 },
+    { art: 'strip',  label: 'photostrip ↗', href: 'https://fotobooth.pancakes.zip/', lean: 4 },
     { art: 'monstera', cls: 'plant', hideSm: true },
   ] },
 ];
 
 /* Pinned to the wall, to the right of the short shelf */
-const WALL = { art: 'frame', label: 'gallery ↗', href: 'https://galler-bay.vercel.app/' };
+const WALL = { art: 'frame', label: 'gallery ↗', href: 'https://gallery.pancakes.zip/' };
 
 /* ---------- helpers ---------- */
 const $ = (s, el = document) => el.querySelector(s);
